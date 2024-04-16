@@ -1,0 +1,89 @@
+@model StockProject.Models.Products
+@{
+  ViewData["Title"] = "Detalles del producto";
+  var categorias = ViewBag.Categorias as SelectList;
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+<section class="py-5">
+  <div class="container px-4 px-lg-5 my-5">
+    <div class="row gx-4 gx-lg-5 align-items-center">
+      <div class="col-md-5"><img class="card-img-top mb-5 mb-md-0" src="~/images/stock.png" alt="imagen del producto" />
+      </div>
+      <div class="col-md-6">
+        <div class="small mb-1">
+          <h5>Code</h5>
+          <h3>@Model.Codigo_producto</h3>
+        </div>
+        <h2 class="display-6 fw-bolder">@Model.Nombre_producto</h2>
+        <div class="fs-5 mb-2">
+          <p class="mb-1">Stock disponible: </p><span class="display-5">@Model.Stock</span>
+        </div>
+        <div class="fs-5 mb-3">
+          <p class="mb-1">Precio de venta: </p><span class="text-success display-6">$@Model.Precio_producto</span>
+        </div>
+        <div class="d-flex">
+          <button class="me-2 btn btn-lg btn-success btn-outline-dark flex-shrink-1 text-white" data-toggle="modal"
+            data-target="#modal-edit" type="button">
+            Editar
+          </button>
+          <button class="btn btn-danger btn-lg btn-outline-dark flex-shrink-1 text-white" type="button">
+            Eliminar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Definición del modal editar -->
+<div class="modal" id="modal-edit">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <!-- Encabezado del modal -->
+      <div class="modal-header">
+        <h4 class="modal-title">Editar producto</h4>
+        <button type="button" class="close" data-dismiss="modal">&times;</button>
+      </div>
+
+      <form method="post" asp-action="Update" asp-route-id="@Model.Id_producto">
+        <input type="hidden" asp-for="Id_producto" />
+        <div class="modal-body">
+          <div class="mb-3">
+            <label asp-for="Nombre_producto" class="form-label">Nombre</label>
+            <input asp-for="Nombre_producto" type="text" class="form-control" id="inputName">
+          </div>
+          <div class="mb-3">
+            <label asp-for="Codigo_producto" class="form-label">Codigo del producto</label>
+            <input asp-for="Codigo_producto" type="text" class="form-control" id="inputCodigoProducto">
+          </div>
+          <div class="mb-3">
+            <label asp-for="Precio_producto" class="form-label">Precio</label>
+            <input asp-for="Precio_producto" type="text" class="form-control" id="inputPrecio">
+          </div>
+          <div class="mb-3">
+            <label asp-for="Id_categoria" class="form-label">Id de la categoria</label>
+            <select asp-for="Id_categoria" class="form-control" id="inputCategoria" asp-items="@(ViewBag.Categorias)">
+            </select>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+          <button type="submit" class="btn btn-primary">Guardar cambios</button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+</div>
+
+<!-- Incluir JavaScript de Bootstrap -->
+@section scripts {
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+}

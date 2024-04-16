@@ -1,0 +1,62 @@
+@model X.PagedList.IPagedList<StockProject.Models.Asignacion>
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+
+<table class="table" id="asignacionesTable">
+    <thead class="table-dark">
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Empleado</th>
+            <th scope="col">Producto</th>
+            <th scope="col">Codigo IGS</th>
+            <th scope="col">Comentarios</th>
+            <th scope="col">Cantidad</th>
+            <th scope="col">Fecha</th>
+            <th scope="col">Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var asig in Model)
+        {
+            <tr>
+                <th scope="row">@asig.Id_asignacion</th>
+                <td>@asig.Nombre_empleado</td>
+                <td>@asig.Nombre_producto</td>
+                <td>@asig.Codigo_igs</td>
+                <td>@asig.Referencia</td>
+                <td>@asig.Cantidad</td>
+                <td>@asig.Fecha</td>
+                <td class="d-flex justify-content-center">
+                    <a id="btnEditar_@asig.Id_asignacion" type="button" class="material-icons md-36 text-dark"
+                        data-mdb-toggle="modal" data-mdb-target="#mensajeModal" data-id="@asig.Id_asignacion" data-option="1">
+                        edit_square
+                    </a>
+                    <a id="btnDevolucion_@asig.Id_asignacion" type="button" class="material-icons md-36 text-dark" asp-controller="Devolucion" asp-action="CrearDevolucion" data-id="@asig.Id_asignacion" asp-route-nombre="@asig.Nombre_empleado" data-option="2">
+                        vertical_align_bottom
+                    </a>
+                    <a id="btnEliminar_@asig.Id_asignacion" type="button" class="material-icons md-36 text-dark"
+                        data-mdb-toggle="modal" data-mdb-target="#mensajeModal" data-id="@asig.Id_asignacion" data-option="3">
+                        delete_forever
+                    </a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<div class="pagedList">
+    <p>Pagina @Model.PageNumber de @Model.PageCount</p>
+    @Html.PagedListPager(Model, page => Url.Action("Devolucion", "Devolucion", new { page, search = ViewBag.search }),
+    new
+    PagedListRenderOptions{
+    DisplayLinkToIndividualPages = true,
+    DisplayPageCountAndCurrentLocation = false,
+    MaximumPageNumbersToDisplay = 5,
+    LiElementClasses = new string[] { "page-item" },
+    PageClasses = new string[] { "page-link" },
+    })
+</div>
+
+
+

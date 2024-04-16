@@ -1,0 +1,238 @@
+﻿@model IEnumerable<StockProject.Models.Asignacion>
+
+@{
+    ViewData["Title"] = "Acta de devolucion";
+}
+
+
+<div id="message" class="message">
+    <div id="message-internal-cont" class="">
+        <div class="text-dialog">
+        </div>
+        <span id="close-message" class="material-symbols-outlined clickeable">
+            close
+        </span>
+    </div>
+</div>
+
+ @if (Model != null && Model.Any())
+  {
+    <div class="print-container">
+
+        <div class="row container print-container-header mb-2">
+            <div class="col-md-6 print-signature ">
+                <img src="~/images/logo.jpg" style="max-width: 60%;" />
+            </div>
+        </div>
+
+        
+
+        <hr class="border border-1 border-dark" />
+        <div class="d-flex justify-content-center">
+            <h4>ACTA DE DEVOLUCION DE MATERIAL</h4>
+        </div>
+        <div class="">
+            <p><strong>EMPLEADO:</strong> @ViewBag.nombreEmpleado </p>
+            <p><strong>NO:</strong> @ViewBag.numEmpleado </p>
+        </div>
+
+        <table class="table table-hover table-bordered border-dark border-2 print-table">
+            <thead>
+                <tr>
+                    <th class="text-center" scope="colgroup" colspan="5">ACUERDO DE DEVOLUCION DE EQUIPO Y/O MATERIAL</th>
+                </tr>
+
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="col">SERIE IGS</th>
+                    <th scope="col">DESCRIPCION</th>
+                    <th scope="col">CANTIDAD</th>
+                    <th scope="col">PIEZA/CAJA</th>
+                    <th class="td_ref" scope="col">REFERENCIA</th>
+                    <th class="td_ref"  scope="col">FECHA</th>
+                    <th scope="col"></th>
+                </tr>
+           
+                    @foreach (var assignment in Model)
+                    {
+                        <tr id="tr_@assignment.Id_asignacion">
+                            <td>@assignment.Codigo_igs</td>
+                            <td>@assignment.Nombre_producto</td>
+                            <td>@assignment.Cantidad</td>
+                            <td>
+                                <input class="border-0" list="unidad" name="browser">
+                                <datalist id="unidad">
+                                    <option value="PIEZA">PIEZA</option>
+                                    <option value="CAJA">CAJA</option>
+                                </datalist>
+                            </td>
+                            <td class="td_ref">@assignment.Referencia</td>
+                            <td class="td_ref">@assignment.Fecha</td>
+                            <td>
+                                <button data-id="@assignment.Id_asignacion" class="remove-assig btn btn-danger"><strong>—</strong></button>
+                            </td>
+                        </tr>
+                    }
+
+                    <tr>
+                        <th></th>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="row container print-container-signature mb-5">
+                <div class="col-md-6 print-signature text-center">
+                    <p>NOMBRE EMPLEADO</p>
+                    <p><strong>___________________________</strong></p>
+                </div>
+
+                <div class="col-md-6 print-signature text-center">
+                    <p>FIRMA RECIBIDO</p>
+                    <p><strong>___________________________</strong></p>
+                </div>
+            </div>
+
+            <div class="row container print-container-buttons">
+                <div class="col-md-6 print-signature text-center">
+                    <button id="btn_imprimir" class="btn btn-secondary">IMPRIMIR</button>
+                </div>
+                <div class="col-md-6 print-signature text-center">
+                    <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#confirmarModal">GUARDAR</button>
+                </div>
+
+            </div>
+
+    </div>
+}
+else
+{
+    <div class="print-container">
+        <div class="row container print-container-header mb-2">
+            <div class="col-md-6 print-signature ">
+                <img src="~/images/logo.jpg" style="max-width: 60%;" />
+            </div>
+        </div>
+        <div class="d-flex justify-content-center">
+            <h4>ACTA DE DEVOLUCION DE MATERIAL</h4>
+        </div>
+        <div class="">
+            <p><strong>EMPLEADO:</strong> @ViewBag.nombreEmpleado </p>
+            <p><strong>NO:</strong> @ViewBag.numEmpleado </p>
+        </div>
+        <div class="container mt-5">
+            <div class="row">
+                <div class="col-md-6 offset-md-3">
+                    <div class="alert alert-info">
+                        <!-- Contenido del cuadro de información -->
+                        <strong>Información:</strong> El empleado no tiene asignaciones actualmente
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<!-- MODAL -->
+<div class="modal fade" id="confirmarModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmar acta de devolucion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Se eliminaran las asignaciones agregadas al acta de devolucion.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button id="btn_confirmar" type="button" class="btn btn-primary">Confirmar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script>
+        //Me quede en agregar un mensaje al momento de devolver material y que se recarga la pagina, 
+        // pude agregar una variable que se guarda en el navegador pero me falta agregar un popup chido
+        $(document).ready(function () {
+            if (window.localStorage.getItem('reload') === "true") {
+               var dialogo = document.getElementById("message");
+               var contenedor = document.getElementById("message-internal-cont");
+               var textoDialog = document.querySelector("#message-internal-cont .text-dialog");
+               
+               textoDialog.textContent = window.localStorage.getItem('textoMensaje');
+               dialogo.style.display = 'flex';
+                if (window.localStorage.getItem('stockStatus') === "true" ) {
+                    contenedor.classList.add("successful");
+               }else{
+                    contenedor.classList.add("error");
+               }
+
+
+            }
+            window.localStorage.setItem('reload', false);
+            $(".remove-assig").click(function (){
+                var id = $(this).data("id");
+                $(this).closest('tr').remove();
+            });
+
+
+
+            $("#close-message").click(function () {
+
+                document.getElementById("message").style.display = 'none';
+
+            });
+
+            
+
+            $("#btn_confirmar").click(function () {
+
+                var ids = $(".remove-assig").map(function () {
+                    return $(this).data("id");
+
+                }).get();
+
+
+                $.ajax({
+                    url: "/Devolucion/EliminarRegistro",
+                    type: "Post",
+                    dataType: "Json",
+                    data: { ids: ids }, 
+                    success: function (data) {
+                        var resultado = data.result;
+                        var mensaje = data.mensaje;
+                        var stockStatus = data.stockStatus;
+                        /*REVISAR EL IF*/
+                        // Ahora puedes usar 'resultado' y 'mensaje' en tu JavaScript.
+                        if (resultado) {//revisar
+                            window.localStorage.setItem('reload', true);
+                            window.localStorage.setItem('stockStatus', stockStatus);
+                            window.localStorage.setItem('textoMensaje', mensaje);
+                            location.reload(true);
+                        }
+                       
+                    },
+                    error: function (xhr, status, error) {
+                        alert("Algo salió mal. Estado de la solicitud: " + status + "\nMensaje de error: " + error);
+                    }
+                });
+
+            });
+
+
+            $("#btn_imprimir").click(function(){
+                window.print();
+            });
+
+        });
+    </script>
+  
+}

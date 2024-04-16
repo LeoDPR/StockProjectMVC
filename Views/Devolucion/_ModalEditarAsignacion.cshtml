@@ -1,0 +1,39 @@
+@model StockProject.Models.Asignacion
+<!-- Modal -->
+<div class="modal" id="divModal" tabindex="-1" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Editar asignacion</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form method="post" asp-action="Update" asp-route-id="@Model.Id_asignacion">
+                <input type="hidden" asp-for="Id_asignacion" />
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label asp-for="Nombre_producto" class="form-label">Nombre de producto</label>
+                        <select asp-for="Nombre_producto" class="form-control" id="inputNombreProd"
+                            asp-items="@(ViewBag.Productos)">
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Referencia" class="form-label">Comentario</label>
+                        <input asp-for="Referencia" type="text" class="form-control" id="inputCodigoProducto">
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Cantidad" class="form-label">Cantidad</label>
+                        <input asp-for="Cantidad" type="text" class="form-control" id="inputPrecio">
+                    </div>
+                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button id="btnConfirmar" type="button" class="btn btn-success"
+                        data-id="@Model.Id_asignacion">Guardar cambios</button>
+                </div>
+                </form>
+        </div>
+    </div>
+
+</div>

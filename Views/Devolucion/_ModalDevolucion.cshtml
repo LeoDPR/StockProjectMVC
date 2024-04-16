@@ -1,0 +1,41 @@
+@model StockProject.Models.Asignacion
+<!-- Modal -->
+<div class="modal" id="divModal" tabindex="-1" aria-labelledby="mensajeModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Devolucion de producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>El usuario devolvió el producto de la asignacion: </p>
+                <table class="table" id="asignacionesTable">
+                    <thead class="table-dark">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Empleado</th>
+                            <th scope="col">Producto</th>
+                            <th scope="col">Cantidad</th>
+                            <th scope="col">Fecha</th>
+                        </tr>
+                    </thead>
+                    <tbody>  
+                        <tr>
+                            <th scope="row">@Model.Id_asignacion</th>
+                            <td>@Model.Nombre_empleado</td>
+                            <td>@Model.Nombre_producto</td>
+                            <td>@Model.Cantidad</td>
+                            <td>@Model.Fecha</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="btnConfirmar" type="button" class="btn btn-success" data-id="@Model.Id_asignacion">Confirmar devolución</button>
+            </div>
+        </div>
+    </div>
+
+</div>

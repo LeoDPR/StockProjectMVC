@@ -1,0 +1,120 @@
+@model X.PagedList.IPagedList<StockProject.Models.Asignacion>
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@{
+  ViewData["Title"] = "Devolucion de producto";
+}
+
+<h1>@ViewData["Title"]</h1>
+<div class="col-md-6 mb-3">
+  <input id="searchInput" type="search" class="form-control rounded"
+    placeholder="Ingresa el nombre del empleado o producto" aria-label="Search" aria-describedby="search-addon" />
+</div>
+
+<!-- LISTA DE LAS ASIGNACIONES -->
+<div id="asignacionList">
+  @Html.Partial("_ListaAsignaciones.cshtml", Model)
+</div>
+
+<!-- MODAL A MOSTRAR -->
+<div id="mensajeModal">
+
+</div>
+
+
+@section Scripts{
+  <script>
+    $(document).ready(function () {
+
+      // Función para realizar la búsqueda cada vez que el usuario escribe algo
+      $("#searchInput").on("input", function () {
+        var search = $(this).val();
+        var currentPage = $(".pagination .active").data("current-page"); // Obtener el valor actual de la página seleccionada
+        buscarAsignaciones(search, currentPage); // Pasar el valor de la página actual a la función buscarAsignaciones
+      });
+
+            //_ListaAsignaciones activa las opciones de eliminacion, devolucion y editar asignacion
+            function activarEventoClickDeOpciones() {
+
+                $("a.material-icons").on("click", function () {
+                    var id = $(this).data("id");
+                    var option = $(this).data("option");
+                    if (option != 2) {//Evita que al presionar la opcind de crear devolucion intente abrir un modal
+                        $.ajax({
+                            url: "/Devolucion/ObtenerRegistro",
+                            type: "GET",
+                            data: { id: id, option: option },
+                            success: function (result) {
+                                // Insertar el contenido del modal en el div "mensajeModal"
+                                $("#mensajeModal").html(result);
+                                // Mostrar el modal
+                                $("#divModal").modal("show");
+                                activateOnclick();
+                            },
+                            error: function (error) {
+                                alert(error);
+                            }
+                        });
+                    }
+
+                });
+
+            }
+
+            //_ModalEliminar que se activa al hacer click en el bote de basura
+            function activateOnclick() {
+                $("#btnConfirmar").on("click", function () {
+                    // Obtener el ID del elemento desde el atributo "data-id" del botón
+                    var id = $(this).data("id");
+                    var urlParams = new URLSearchParams(window.location.search);
+                    var pageNumber = urlParams.get('page')
+                    var searchInput = urlParams.get('search')
+                    // Realizar una solicitud AJAX para obtener el registro del servidor
+                    $.ajax({
+                        url: "/Devolucion/EliminarRegistro",
+                        type: "POST",
+                        data: { id: id },
+                        success: function (data) {
+                            if (data.result) {
+
+                            }else{
+
+
+                            }
+                            if (urlParams != "") {
+                                buscarAsignaciones(searchInput, pageNumber);
+                            } else {
+                                buscarAsignaciones();
+                            }
+                            $("#divModal").modal("hide");
+                        },
+                        error: function (error) {
+                            alert("Algo salio mal");
+                        }
+                    });
+                });
+            }
+
+            //Esta funcion busca registros dependiendo del nombre del empleado o el tipo de producto
+      function buscarAsignaciones(search, page) {
+        $.ajax({
+          type: "GET",
+          url: "@Url.Action("ObtenerLista", "Devolucion")",
+          data: { search: search, page: page },
+          success: function (result) {
+            $("#asignacionList").html(result);
+            activarEventoClickDeOpciones();
+          },
+          error: function (xhr, status, error) {
+            console.error(error);
+          }
+        });
+      }
+
+
+      activarEventoClickDeOpciones();
+    });
+
+  </script>
+
+}

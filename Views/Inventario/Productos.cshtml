@@ -1,0 +1,103 @@
+@model X.PagedList.IPagedList<StockProject.Models.Products> //Al heredar de IEnumerbale IPagedList tiene las mismas propiedades de ser leidas con el foreach, entre otras cosas.
+@using X.PagedList.Mvc.Core
+@using X.PagedList.Web.Common
+@{
+    ViewData["Title"] = "Productos";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<div class="input-group rounded row mb-5">
+    <div class="col-md-6 mr-5">
+        <h5 class="mb-1 mr-1">Filtrar por codigo o nombre:</h5>
+        <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search"
+            aria-describedby="search-addon" />
+    </div>
+    <div class="col-md-3">
+         <h5 class="mb-1">Filtrar por categoria:</h5>
+        <select class="form-control" id="inputCategoria">
+            <option value="0">Selecciona una categoria</option>
+        </select>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var product in Model)
+    {
+        <div class="col-md-2 mb-6"> <!-- Aquí puedes ajustar el tamaño de la columna según tus necesidades -->
+            <div class="card" style="width: 12rem;">
+                <img src="~/images/stock.png" class="card-img-top img-fluid d-block" alt="imagen del producto">
+                <div class="card-body">
+                    <h5 class="card-title">@product.Id_producto</h5>
+                    <p class="card-text">@product.Nombre_producto</p>
+                    <a asp-controller="Inventario" asp-action="Detalles" asp-route-id="@product.Id_producto"
+                        class="btn btn-primary">Editar</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@*----Paginacion----*@
+<div class="text-center">
+    Página @(Model.PageNumber) de @Model.PageCount
+
+    <nav aria-label="Page navigation" class="d-flex justify-content-center">
+        <ul class="pagination">
+
+            @if (Model.HasPreviousPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Productos", new { page = Model.PageNumber - 1 })"
+                        aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                        <span class="sr-only">Anterior</span>
+                    </a>
+                </li>
+            }
+
+            @if (Model.PageCount > 1)
+            {
+                @if (Model.PageNumber > 3)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="@Url.Action("Productos", new { page = 1 })">1</a>
+                    </li>
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                }
+
+                @for (int i = Math.Max(1, Model.PageNumber - 2); i <= Math.Min(Model.PageCount, Model.PageNumber + 2); i++)
+                {
+                    <li class="page-item @(Model.PageNumber == i ? "active" : "")">
+                        <a class="page-link" href="@Url.Action("Productos", new { page = i })">@i</a>
+                    </li>
+                }
+
+                @if (Model.PageNumber < Model.PageCount - 2)
+                {
+                    <li class="page-item disabled">
+                        <span class="page-link">...</span>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link"
+                            href="@Url.Action("Productos", new { page = Model.PageCount })">@Model.PageCount</a>
+                    </li>
+                }
+            }
+
+            @if (Model.HasNextPage)
+            {
+                <li class="page-item">
+                    <a class="page-link" href="@Url.Action("Productos", new { page = Model.PageNumber + 1 })"
+                        aria-label="Siguiente">
+                        <span class="sr-only">Siguiente</span>
+                        <span aria-hidden="true">&raquo;</span>
+
+                    </a>
+                </li>
+            }
+
+        </ul>
+    </nav>
+</div>

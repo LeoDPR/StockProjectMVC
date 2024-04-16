@@ -1,0 +1,44 @@
+﻿
+/* Ocultar elementos no esenciales */
+header, nav, aside, footer {
+    display: none;
+}
+
+body {
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.print-container-signature {
+    display: block;
+    flex-wrap: nowrap;
+}
+
+.btn {
+    display: none;
+}
+
+.td_ref {
+    display: none;
+}
+
+#message{
+    display: none;
+}
+
+.print-signature {
+    display: inline-block;
+    width: 48%;
+}
+
+.print-table {
+    width: 100% !important;
+    page-break-inside: avoid !important;
+}
+
+/* Ajustar imágenes al ancho de la página */
+img {
+    max-width: 100%;
+    height: auto;
+}
