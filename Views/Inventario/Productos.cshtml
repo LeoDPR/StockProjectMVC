@@ -7,6 +7,8 @@
 
 <h1>@ViewData["Title"]</h1>
 
+<!--INICIO filtros de busqueda-->
+@*TODO funcionamiento*@
 <div class="input-group rounded row mb-5">
     <div class="col-md-6 mr-5">
         <h5 class="mb-1 mr-1">Filtrar por codigo o nombre:</h5>
@@ -20,7 +22,10 @@
         </select>
     </div>
 </div>
+<!--FIN filtros de busqueda-->
 
+
+<!--INICIO tarjetas de productos-->
 <div class="row">
     @foreach (var product in Model)
     {
@@ -28,16 +33,21 @@
             <div class="card" style="width: 12rem;">
                 <img src="~/images/stock.png" class="card-img-top img-fluid d-block" alt="imagen del producto">
                 <div class="card-body">
-                    <h5 class="card-title">@product.Id_producto</h5>
+                    <h5 class="card-title">@product.Codigo_producto</h5>
                     <p class="card-text">@product.Nombre_producto</p>
-                    <a asp-controller="Inventario" asp-action="Detalles" asp-route-id="@product.Id_producto"
-                        class="btn btn-primary">Editar</a>
+                    <a asp-controller="Inventario" asp-action="Detalles" asp-route-id="@product.Id_producto" 
+                    class="btn btn-primary">Editar</a> <!--Al hacer click aqui te mandara a la pagina de "Detalles"-->
                 </div>
             </div>
         </div>
     }
 </div>
-@*----Paginacion----*@
+<!--FIN tarjetas de productos-->
+
+
+
+@*----INICIO Paginacion----*@
+@*TODO reutilizar codigo*@
 <div class="text-center">
     Página @(Model.PageNumber) de @Model.PageCount
 
@@ -101,3 +111,4 @@
         </ul>
     </nav>
 </div>
+@*----FIN Paginacion----*@

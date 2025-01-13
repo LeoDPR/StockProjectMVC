@@ -6,7 +6,7 @@ namespace StockProject.Models
     {
         [Key]
         public int Id_producto { get; set; }
-        [Column("codigo_producto")]
+        [Column("codigo_producto")] //con este renglon le especificamos el nombre que tiene en la base de datos cada propiedad
         public string? Codigo_producto { get; set; }
         [Column("nombre_producto")]
         public string? Nombre_producto { get; set; }

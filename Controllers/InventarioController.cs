@@ -32,20 +32,19 @@ namespace StockProject.Controllers
         public async Task<IActionResult> Detalles(int id)
         {
             if (id == 0)
-            {
                 return NotFound();
-            }
 
+            //Buscamos el producto con el id, basado en el modelo Products
             var producto = await _dbContext.Products.FindAsync(id);
+
             if (producto == null)
-            {
                 return NotFound();
-            }
 
             var category = await _dbContext.Categorias.ToListAsync();
 
-            // Pasar las categorías y el producto a la vista
+            // Pasa las categorías a traves de un VIEWBAG
             ViewBag.Categorias = new SelectList(category, "Id_categoria", "Nombre_categoria");
+            // Pasa la vista con el objeto producto el cual contiene todos los atributos del modelo Producto (id, codigo, nombre, fecha, precio, stock, idcategoria)
             return View(producto);
         }
 

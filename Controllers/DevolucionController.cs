@@ -16,6 +16,7 @@ namespace StockProject.Controllers
             _dbContext = context;
         }
 
+
         public async Task<IActionResult> Devolucion(string? search, int page = 1)
         {
             var productos = await _dbContext.Categorias.ToListAsync();
@@ -37,6 +38,7 @@ namespace StockProject.Controllers
             }
         }
 
+
         [HttpGet]
         public async Task<IActionResult> ObtenerLista(string? search, int page = 1)
         {
@@ -51,6 +53,7 @@ namespace StockProject.Controllers
                 || r.Nombre_producto.Contains(search)).OrderBy(r => r.Nombre_empleado).ToPagedListAsync(page, 15);
             return PartialView("_ListaAsignaciones", model);
         }
+
 
         public async Task<IActionResult> ObtenerRegistro(int id, int option)
         {
